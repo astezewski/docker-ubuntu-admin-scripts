@@ -1,0 +1,7 @@
+git
+htop
+vim
+curl
+wget
+ssh
+docker

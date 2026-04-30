@@ -1,11 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
-BACKUP_DIR="$HOME/scripts/backup"
-LOG_DIR="$HOME/scripts/logs"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"
+
+BACKUP_DIR="$BASE_DIR/backup"
+LOG_DIR="$BASE_DIR/logs"
 LOG_FILE="$LOG_DIR/system.log"
 DAYS_TO_KEEP=7 
-
 
 log() {
     local LEVEL="$1"

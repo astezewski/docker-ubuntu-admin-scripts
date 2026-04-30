@@ -1,9 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-SOURCE_DIR="$HOME/scripts"
-BACKUP_DIR="$HOME/scripts/backup"
-LOG_DIR="$HOME/scripts/logs"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"
+
+SOURCE_DIR="$BASE_DIR"
+BACKUP_DIR="$BASE_DIR/backup"
+LOG_DIR="$BASE_DIR/logs"
 LOG_FILE="$LOG_DIR/system.log"
 DATE=$(date +%Y-%m-%d_%H-%M-%S)
 FILENAME="backup_$DATE.tar.gz"

@@ -1,13 +1,14 @@
 #!/bin/bash
 
-USER_LOGGED=$USER
-USER_DIR="$HOME/scripts/users/${USER_LOGGED}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"
+
+USER_LOGGED="${USER:-$(whoami)}"
+USER_DIR="$BASE_DIR/users/${USER_LOGGED}"
 
 if [ -d "$USER_DIR" ]; then
-    echo "Folder użytkownika już istnieje"
+    echo "Folder użytkownika $USER_LOGGED już istnieje"
 else 
     mkdir -p "$USER_DIR"
-    echo "Utworzono folder $USER_LOGGED"
+    echo "Utworzono folder $USER_LOGGED w ścieżce: $USER_DIR"
 fi
-
-

@@ -1,17 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ -z "$1" ]; then
-    echo "Użycie: $0 <ścieżka_do_folderu> <liczba_dni>"
-    echo "Przykład: $0 ./logs 30"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"
+
+TARGET_DIR="${1:-}"
+
+DAYS_OLD="${2:-30}"
+
+if [ -z "$TARGET_DIR" ]; then
+    echo "Użycie: $0 <ścieżka_do_folderu> [liczba_dni]"
+    
+    echo "Przykład: $0 \"$BASE_DIR/logs\" 14"
+    echo "Domyślna liczba dni: 30"
     exit 1
-fi
-
-TARGET_DIR="$1"
-DAYS_OLD="$2"
-
-if [ -z "$DAYS_OLD" ]; then
-    DAYS_OLD=30
 fi
 
 if [ ! -d "$TARGET_DIR" ]; then
@@ -19,15 +21,19 @@ if [ ! -d "$TARGET_DIR" ]; then
     exit 1
 fi
 
-echo "Sprzątam w: $TARGET_DIR (usuwam pliki starsze niż $DAYS_OLD dni)"
+echo "Sprzątam w: $TARGET_DIR (usuwam pliki *.log starsze niż $DAYS_OLD dni)..."
 
-for plik in "$TARGET_DIR"/*.log; do
-    if [ -f "$plik" ]; then
-        if [ -n "$(find "$plik" -mtime +"$DAYS_OLD")" ]; then
-            echo "Usuwam przestarzały plik: $plik"
-            rm "$plik"
+FILES=$(find "$TARGET_DIR" -maxdepth 1 -name "*.log" -type f -mtime +"$DAYS_OLD")
+
+if [ -z "$FILES" ]; then
+    echo "Brak starych plików logów do usunięcia."
+else
+    echo "$FILES" | while read -r file; do
+        if [ -n "$file" ]; then
+            echo "Usuwam przestarzały plik: $(basename "$file")"
+            rm -f "$file"
         fi
-    fi
-done
+    done
+fi
 
 echo "Zakończono sprzątanie."
